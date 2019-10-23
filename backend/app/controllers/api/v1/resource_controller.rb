@@ -3,11 +3,12 @@ class Api::V1::ResourceController < ApplicationController
   
     def index
       set_resource_variable(resource_class.all, "@#{resource_name.pluralize}")
-      render json: instance_variable_get("@#{resource_name.pluralize}")
+      render json: instance_variable_get("@#{resource_name.pluralize}"), 
+              include: resource_class.reflect_on_all_associations.map(&:name)
     end
   
     def show
-      render json: resource
+      render json: resource, include: resource_class.reflect_on_all_associations.map(&:name)
     end
   
     def create
@@ -22,7 +23,7 @@ class Api::V1::ResourceController < ApplicationController
   
     def update
       if resource.update(resource_params)
-        render json: resource
+        render json: resource, include: resource_class.reflect_on_all_associations.map(&:name)
       else
         render json: resource.errors, status: :unprocessable_entity
       end
