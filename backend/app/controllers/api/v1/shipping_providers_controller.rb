@@ -17,7 +17,8 @@ module Api
 
       # POST /shipping_providers
       def create
-        @shipping_provider = ShippingProvider.new(shipping_provider_params)
+        @shipping_provider = ShippingProvider.new(shipping_provider_params.slice(:company))
+        @shipping_provider.rate = Money.from_amount(shipping_provider_params.rate, shipping_provider_params.currency)
 
         if @shipping_provider.save
           render json: @shipping_provider, status: :created, location: @shipping_provider
@@ -28,7 +29,9 @@ module Api
 
       # PATCH/PUT /shipping_providers/1
       def update
-        if @shipping_provider.update(shipping_provider_params)
+        @shipping_provider.rate = Money.from_amount(shipping_provider_params.rate, shipping_provider_params.currency)
+
+        if @shipping_provider.update(shipping_provider_params.slice(:company))
           render json: @shipping_provider
         else
           render json: @shipping_provider.errors, status: :unprocessable_entity
@@ -48,7 +51,7 @@ module Api
 
         # Only allow a trusted parameter "white list" through.
         def shipping_provider_params
-          params.require(:shipping_provider).permit(:company, :rate)
+          params.require(:shipping_provider).permit(:company, :rate, :currency)
         end
     end
   end

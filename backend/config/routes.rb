@@ -8,5 +8,5 @@ Rails.application.routes.draw do
     end
   end
 
-  root to: 'shipping_providers#index'
+  root to: 'api/v1/shipping_providers#index'
 end
