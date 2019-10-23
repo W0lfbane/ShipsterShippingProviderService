@@ -1,4 +1,4 @@
-module ExchangeRate extend ActiveSupport::Concern
+module SetExchangeRate extend ActiveSupport::Concern
 
     included do
 
@@ -9,10 +9,9 @@ module ExchangeRate extend ActiveSupport::Concern
 
       def as_json(options={})
         super(options.merge({
-          except: ['rate_cents', 'rate_currency', 'common_rate_cents', 'common_rate_currency']
+          except: ['rate_cents', 'common_rate_cents', 'common_rate_currency']
         })).merge({
-          'rate' => self.rate.to_f,
-          'currency' => self.rate.currency.to_s,
+          'rate' => self.rate.to_f
         })
       end
 

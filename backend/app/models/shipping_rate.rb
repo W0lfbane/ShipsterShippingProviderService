@@ -1,5 +1,5 @@
 class ShippingRate < ApplicationRecord
-    include ExchangeRate
+    include SetExchangeRate
 
     belongs_to :shipping_provider
 

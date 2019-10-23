@@ -1,5 +1,5 @@
 class ShippingProvider < ApplicationRecord
-    include ExchangeRate
+    include SetExchangeRate
 
     has_many :shipping_rates, dependent: :destroy
 
