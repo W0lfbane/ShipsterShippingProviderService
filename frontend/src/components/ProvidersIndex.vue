@@ -146,10 +146,10 @@ export default {
       }).then(resp => {
         const savedProvider = parseProvider(resp.data);
         const existingProviderId = this.providers.findIndex(provider => provider.id === savedProvider.id);
-        if(savedProvider => 0) {
+        if(existingProviderId >= 0) {
           this.providers[existingProviderId] = savedProvider;
         } else {
-          this.providers.push(savedProvider);
+          this.providers.shipping_rates.push(savedProvider);
         }
 
         this.providerId = '';
@@ -176,11 +176,12 @@ export default {
       }).then(resp => {
         const savedShippingRate = parseShippingRate(resp.data);
         const existingShippingRateProviderId = this.providers.findIndex(p => p.shipping_rates.find(s => s.id === savedShippingRate.id));
-        if(existingShippingRateProviderId => 0) {
+        if(existingShippingRateProviderId >= 0) {
           const existingShippingRateId = this.providers[existingShippingRateProviderId].shipping_rates.findIndex(s => s.id === savedShippingRate.id);
           this.providers[existingShippingRateProviderId].shipping_rates[existingShippingRateId] = savedShippingRate;
         } else {
-          this.providers[existingShippingRateProviderId].push(savedShippingRate);
+          const existingProviderId = this.providers.findIndex(provider => provider.id === savedShippingRate.companyId);
+          this.providers[existingProviderId].shipping_rates.push(savedShippingRate);
         }
 
         this.shippingId = '';
