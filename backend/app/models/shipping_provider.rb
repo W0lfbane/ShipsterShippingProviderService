@@ -6,7 +6,8 @@ class ShippingProvider < ApplicationRecord
     has_many :shipping_rates, dependent: :destroy
 
     validates :company, presence: true
-    validates :rate, presence: true
+    validates :rate, numericality: { greater_than: 0 }, presence: true
+    validates :rate_currency, presence: true
 
     def self.import_csv(path)
         CSV.foreach(path, headers: true) do |row|

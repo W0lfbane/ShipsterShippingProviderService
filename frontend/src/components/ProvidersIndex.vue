@@ -14,7 +14,7 @@
             <div>{{ p.id }}</div>
             <div>{{ p.name }}</div>
             <div>{{ p.rate.total }} {{ p.rate.currency }}</div>
-            <div>{{ p.common_rate.total }} {{ p.common_rate.currency }}</div>
+            <div>{{ p.commonRate.total }} {{ p.commonRate.currency }}</div>
           </li>
           <h3>Shipping Rates</h3>
           <li class="title">
@@ -24,14 +24,14 @@
             <div>Total</div>
             <div>Common Total</div>
           </li>
-          <div v-for="s in p.shipping_rates" :key="s.id">
+          <div v-for="s in p.shippingRates" :key="s.id">
             <ul>
               <li>
                 <div>{{ s.id }}</div>
                 <div>{{ s.origin }}</div>
                 <div>{{ s.destination }}</div>
                 <div>{{ s.rate.total }} {{ s.rate.currency }}</div>
-                <div>{{ s.common_rate.total }} {{ s.common_rate.currency }}</div>
+                <div>{{ s.commonRate.total }} {{ s.commonRate.currency }}</div>
               </li>
             </ul>
           </div>
@@ -93,7 +93,7 @@ const parseShippingRate = (shipping) => Object.assign({
     total: shipping.rate,
     currency: shipping.rate_currency
   },
-  common_rate: {
+  commonRate: {
     total: shipping.common_rate,
     currency: shipping.common_rate_currency
   }
@@ -106,11 +106,11 @@ const parseProvider = (provider) => Object.assign({
     total: provider.rate,
     currency: provider.rate_currency
   },
-  common_rate: {
+  commonRate: {
     total: provider.common_rate,
     currency: provider.common_rate_currency
   },
-  shipping_rates: (provider.shipping_rates || []).map(parseShippingRate)
+  shippingRates: (provider.shipping_rates || []).map(parseShippingRate)
 });
 
 export default {
@@ -149,7 +149,7 @@ export default {
         if(existingProviderId >= 0) {
           this.providers[existingProviderId] = savedProvider;
         } else {
-          this.providers.shipping_rates.push(savedProvider);
+          this.providers.shippingRates.push(savedProvider);
         }
 
         this.providerId = '';
@@ -175,13 +175,12 @@ export default {
         }
       }).then(resp => {
         const savedShippingRate = parseShippingRate(resp.data);
-        const existingShippingRateProviderId = this.providers.findIndex(p => p.shipping_rates.find(s => s.id === savedShippingRate.id));
-        if(existingShippingRateProviderId >= 0) {
-          const existingShippingRateId = this.providers[existingShippingRateProviderId].shipping_rates.findIndex(s => s.id === savedShippingRate.id);
-          this.providers[existingShippingRateProviderId].shipping_rates[existingShippingRateId] = savedShippingRate;
+        const existingProviderId = this.providers.findIndex(provider => provider.id === savedShippingRate.companyId);
+        const existingShippingRateId = this.providers[existingProviderId].shippingRates.findIndex(s => s.id === savedShippingRate.id);
+        if(existingShippingRateId >= 0) {
+          this.providers[existingProviderId].shippingRates[existingShippingRateId] = savedShippingRate;
         } else {
-          const existingProviderId = this.providers.findIndex(provider => provider.id === savedShippingRate.companyId);
-          this.providers[existingProviderId].shipping_rates.push(savedShippingRate);
+          this.providers[existingProviderId].shippingRates.push(savedShippingRate);
         }
 
         this.shippingId = '';

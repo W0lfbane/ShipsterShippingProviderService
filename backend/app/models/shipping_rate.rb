@@ -7,7 +7,8 @@ class ShippingRate < ApplicationRecord
 
     validates :origin, length: { is: 2 }, presence: true
     validates :destination, length: { is: 2 }, presence: true
-    validates :rate, presence: true
+    validates :rate, numericality: { greater_than: 0 }, presence: true
+    validates :rate_currency, presence: true
 
     def self.import_csv(path)
         CSV.foreach(path, headers: true) do |row|
