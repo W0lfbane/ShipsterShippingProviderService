@@ -10,6 +10,6 @@ const client = axios.create({
 export default {
     get: (params = {}) => client.get('/shipping_providers', params),
     post: (params = {}) => client.post('/shipping_providers', params),
-    put: (params = {}) => client.put('/shipping_providers', params),
-    delete: (params = {}) => client.delete('/shipping_providers', params)
+    put: (params = {}) => client.put(`/shipping_providers/${params.id}`, params),
+    delete: (params = {}) => client.delete(`/shipping_providers/${params.id}`, params)
 }
